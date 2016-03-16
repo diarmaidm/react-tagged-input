@@ -46,7 +46,8 @@ module.exports = React.createClass({
     }),
     tagOnBlur: React.PropTypes.bool,
     tabIndex: React.PropTypes.number,
-    clickTagToEdit: React.PropTypes.bool
+    clickTagToEdit: React.PropTypes.bool,
+    maxLength: React.PropTypes.number
   },
 
   getDefaultProps: function () {
@@ -58,6 +59,7 @@ module.exports = React.createClass({
       backspaceDeletesWord: true,
       tagOnBlur: false,
       clickTagToEdit: false,
+      maxLength: -1,
       onBeforeAddTag: function (tag) {
         return true;
       },
@@ -119,7 +121,8 @@ module.exports = React.createClass({
         onBlur: this._handleBlur, 
         value: s.currentInput, 
         placeholder: placeholder, 
-        tabIndex: p.tabIndex}
+        tabIndex: p.tabIndex, 
+        maxLength: this.props.maxLength}
       )
       );
 
