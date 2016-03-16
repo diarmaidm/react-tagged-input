@@ -27,6 +27,7 @@ module.exports = React.createClass({
   displayName: 'TaggedInput',
 
   propTypes: {
+    disabled: React.PropTypes.bool,
     onBeforeAddTag: React.PropTypes.func,
     onAddTag: React.PropTypes.func,
     onBeforeRemoveTag: React.PropTypes.func,
@@ -51,6 +52,7 @@ module.exports = React.createClass({
   getDefaultProps: function () {
     return {
       delimiters: [' ', ','],
+      disabled: false,
       unique: true,
       autofocus: false,
       backspaceDeletesWord: true,
@@ -82,6 +84,7 @@ module.exports = React.createClass({
 
     if (p.classes) {
       classes += ' ' + p.classes;
+      if (p.disabled) classes += ' ' + 'disabled'
     }
 
     if (s.tags.length === 0) {
@@ -91,6 +94,7 @@ module.exports = React.createClass({
     var TagComponent = DefaultTagComponent;
 
     for (i = 0; i < s.tags.length; i++) {
+      var removeTagLabel = p.disabled ? ' ' : (p.removeTagLabel || "\u274C")
       tagComponents.push(
         React.createElement(TagComponent, {
           key: 'tag' + i, 
@@ -99,7 +103,7 @@ module.exports = React.createClass({
           onRemove: self._handleRemoveTag.bind(this, i), 
           onEdit: p.clickTagToEdit ? self._handleEditTag.bind(this, i) : null, 
           classes: p.unique && (i === s.duplicateIndex) ? 'duplicate' : '', 
-          removeTagLabel: p.removeTagLabel || "\u274C"}
+          removeTagLabel: removeTagLabel}
         )
       );
     }
@@ -107,6 +111,7 @@ module.exports = React.createClass({
     var input = (
       React.createElement("input", {type: "text", 
         className: "tagged-input", 
+        disabled: this.props.disabled, 
         ref: "input", 
         onKeyUp: this._handleKeyUp, 
         onKeyDown: this._handleKeyDown, 
@@ -143,6 +148,8 @@ module.exports = React.createClass({
   _handleRemoveTag: function (index) {
     var self = this, s = self.state, p = self.props;
 
+    if (p.disabled) return;
+
     if (p.onBeforeRemoveTag(index)) {
       var removedItems = s.tags.splice(index, 1);
 
@@ -160,6 +167,8 @@ module.exports = React.createClass({
   _handleEditTag: function (index) {
     var self = this, s = self.state, p = self.props;
     var removedItems;
+
+    if (p.disabled) return;
 
     if (s.currentInput) {
       var trimmedInput = s.currentInput.trim();
@@ -254,6 +263,8 @@ module.exports = React.createClass({
     var self = this, s = self.state, p = self.props;
     var duplicateIndex;
     var trimmedText;
+
+    if (p.disabled) return;
 
     if (tagText && tagText.length > 0) {
       trimmedText = tagText.trim();

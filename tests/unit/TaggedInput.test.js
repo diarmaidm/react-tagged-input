@@ -127,5 +127,4 @@ describe('TaggedInput', function() {
       expect(onRemoveTag.called).to.be.false;
     });
   });
-
 });
