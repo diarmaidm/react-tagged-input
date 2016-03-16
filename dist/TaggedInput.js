@@ -9,7 +9,7 @@ var KEY_CODES = {
 var DefaultTagComponent = React.createClass({displayName: "DefaultTagComponent",
   render: function () {
     var self = this, p = self.props;
-    var className = 'tag' + p.classes ? (' ' + p.classes) : '';
+    var className = 'tag' + (p.classes ? (' ' + p.classes) : '');
 
     return (
       React.createElement("div", {className: className}, 
